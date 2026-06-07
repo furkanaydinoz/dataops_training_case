@@ -59,8 +59,8 @@ class CapsuleNetwork(nn.Module):
 
     Architecture:
     - Feature extraction via conv + batch norm
-    - PrimaryCaps: 8 capsule types, each with dim=8, at 12x12 spatial positions
-    - DigitCaps: Dynamic routing from 1152 input capsules (8 types × 144 positions) to 10 output capsules
+    - PrimaryCaps: 8 capsule types, each with dim=8, at 8x8 spatial positions
+    - DigitCaps: Dynamic routing from 8 input capsules (each with 512-dim) to 10 output capsules
     - Decoder: Reconstruction head for auxiliary loss
     """
     def __init__(self, num_classes=10):
@@ -69,14 +69,14 @@ class CapsuleNetwork(nn.Module):
         self.conv1 = nn.Conv2d(1, 64, kernel_size=5, stride=1, padding=2)  # 28x28 -> 28x28
         self.bn1 = nn.BatchNorm2d(64)
 
-        # Primary capsules: produces 8 capsule types at 12x12 spatial positions
-        # Input: (B, 64, 28, 28) -> Output: (B, 8, 144, 8)
-        # After stride=2, kernel=5, padding=0: (28-5)/2+1 = 12 spatial
-        self.primary_caps = PrimaryCaps(64, out_capsules=8, capsule_dim=8, kernel_size=5, stride=2)
+        # Primary capsules: produces 8 capsule types at 8x8 spatial positions
+        # Input: (B, 64, 28, 28) -> Output: (B, 8, 64, 8)
+        # With kernel=5, stride=3, padding=0: (28-5)/3+1 = 8 spatial
+        self.primary_caps = PrimaryCaps(64, out_capsules=8, capsule_dim=8, kernel_size=5, stride=3)
 
-        # DigitCaps: routes from 1152 input capsules (8 types × 144 positions) to 10 outputs
-        # Each input capsule has dim=8
-        self.digit_caps = DigitCaps(in_capsules=1152, in_dim=8, out_capsules=num_classes,
+        # DigitCaps: routes from 8 input capsules (at 64 spatial pos each) to 10 outputs
+        # in_dim = 64 spatial * 8 capsule_dim = 512
+        self.digit_caps = DigitCaps(in_capsules=8, in_dim=512, out_capsules=num_classes,
                                      out_dim=16, num_routing=3)
 
         # Decoder for reconstruction loss
@@ -95,14 +95,14 @@ class CapsuleNetwork(nn.Module):
         # Feature extraction
         x = F.relu(self.bn1(self.conv1(x)))  # (B, 64, 28, 28)
 
-        # Primary capsules: (B, 64, 28, 28) -> (B, 8, 144, 8)
+        # Primary capsules: (B, 64, 28, 28) -> (B, 8, 64, 8) where 64 = 8x8 spatial
         x = self.primary_caps(x)
 
-        # Reshape for digit caps: (B, 8, 144, 8) -> (B, 1152, 8)
+        # Reshape for digit caps: (B, 8, 64, 8) -> (B, 8, 512) where 512 = 64*8
         x = x.reshape(batch, 8, -1, 8)
-        x = x.reshape(batch, -1, 8)  # (B, 1152, 8)
+        x = x.reshape(batch, 8, -1)  # (B, 8, 512)
 
-        # Digit capsules: (B, 1152, 8) -> (B, 10, 16)
+        # Digit capsules: (B, 8, 512) -> (B, 10, 16)
         x = self.digit_caps(x)
 
         # Capsule lengths as class scores
