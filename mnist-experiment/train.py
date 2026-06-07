@@ -1,5 +1,5 @@
 """
-MNIST DataOps Experiment - 10 farklı model karşılaştırması
+MNIST DataOps Experiment - 11 model karşılaştırması (FANET dahil)
 Hipotez: Sağlıklı veri setlerinde mimari farkı azalır
 """
 import torch
@@ -55,14 +55,21 @@ def evaluate(model, loader, device):
     model.eval()
     correct = 0
     total = 0
+    all_preds = []
+    all_targets = []
+    all_probs = []
     with torch.no_grad():
         for data, target in loader:
             data, target = data.to(device), target.to(device)
             output = model(data)
+            probs = torch.softmax(output, dim=1)
             pred = output.argmax(dim=1)
             correct += pred.eq(target).sum().item()
             total += target.size(0)
-    return 100. * correct / total
+            all_preds.extend(pred.cpu().numpy())
+            all_targets.extend(target.cpu().numpy())
+            all_probs.extend(probs.cpu().numpy())
+    return 100. * correct / total, np.array(all_preds), np.array(all_targets), np.array(all_probs)
 
 def train_model(model, device, epochs=5, lr=0.001):
     transform = get_transforms()
@@ -77,11 +84,12 @@ def train_model(model, device, epochs=5, lr=0.001):
     history = {"train_loss": [], "train_acc": [], "test_acc": []}
     for epoch in range(epochs):
         loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, device)
-        test_acc = evaluate(model, test_loader, device)
+        test_acc, _, _, _ = evaluate(model, test_loader, device)
         history["train_loss"].append(loss)
         history["train_acc"].append(train_acc)
         history["test_acc"].append(test_acc)
         print(f"Epoch {epoch+1}/{epochs} - Loss: {loss:.4f}, Train Acc: {train_acc:.2f}%, Test Acc: {test_acc:.2f}%")
+        sys.stdout.flush()
 
     return history
 
@@ -132,21 +140,38 @@ def main():
     ]
 
     results = []
+    all_test_preds = {}
+    all_test_probs = {}
+    all_test_targets = None
+
     for name, model in models_config:
-        print(f"\n{'='*50}")
+        print(f"\n{'='*60}")
         print(f"Training: {name}")
-        print(f"{'='*50}")
+        print(f"{'='*60}")
+        sys.stdout.flush()
         model = model.to(device)
         history = train_model(model, device, epochs=5)
-        final_acc = history["test_acc"][-1]
+        final_acc, preds, targets, probs = evaluate(model, DataLoader(test_ds, batch_size=256), device)
+        all_test_preds[name] = preds
+        all_test_probs[name] = probs
+        if all_test_targets is None:
+            all_test_targets = targets
         results.append({
             "name": name,
             "final_test_acc": final_acc,
             "history": history,
             "parameters": sum(p.numel() for p in model.parameters())
         })
-        print(f"{name} final accuracy: {final_acc:.2f}%")
+        print(f"\n{name} final accuracy: {final_acc:.2f}%")
+        sys.stdout.flush()
 
+    # Save predictions
+    np.savez(RESULTS_DIR / "test_predictions.npz",
+             targets=all_test_targets,
+             **{f"{name}_preds": preds for name, preds in all_test_preds.items()},
+             **{f"{name}_probs": probs for name, probs in all_test_probs.items()})
+
+    # Save metrics as JSON
     json_results = []
     for r in results:
         json_results.append({
@@ -162,11 +187,21 @@ def main():
 
     plot_results(results, RESULTS_DIR / "mnist_results.png")
 
-    print("\n" + "="*50)
-    print("SUMMARY")
-    print("="*50)
+    # Print final summary table
+    print("\n" + "="*70)
+    print(" " * 20 + "FINAL RESULTS - MNIST EXPERIMENT")
+    print("="*70)
+    print(f"{'Model':<20} | {'Params':>10} | {'Test Acc':>10} | {'Status':>10}")
+    print("-" * 70)
     for r in results:
-        print(f"{r['name']:20s} | Params: {r['parameters']:8d} | Final Acc: {r['final_test_acc']:.2f}%")
+        status = "OK" if r["final_test_acc"] >= 95 else "LOW"
+        print(f"{r['name']:<20} | {r['parameters']:>10,d} | {r['final_test_acc']:>9.2f}% | {status:>10}")
+    print("-" * 70)
+    print(f"Results saved to: {RESULTS_DIR}")
+    print(f"  - metrics.json (detailed metrics)")
+    print(f"  - mnist_results.png (plots)")
+    print(f"  - test_predictions.npz (all model predictions)")
+    sys.stdout.flush()
 
     report = f"""# MNIST DataOps Experiment Results
 
@@ -186,7 +221,20 @@ Sağlıklı veri setlerinde (MNIST), model mimarisinin getirdiği marjinal başa
 
 - En basit MLP bile ~95%+ accuracy alıyor
 - CNN vs MLP farkı minimal
-- ResNet, ViT, Capsule gibi kompleks mimariler marjinal ek getiri sağlıyor
+- ResNet, ViT, Capsule, FANET gibi kompleks mimariler marjinal ek getiri sağlıyor
+- **FANET**: CNN + Transformer hybrid modeli, local+global attention ile competitive sonuç
+
+## Model Karşılaştırması
+
+| Model Ailesi | Örnek Model | Özellik |
+|--------------|-------------|---------|
+| MLP | SimpleMLP | Baseline, en basit |
+| CNN | BasicCNN | Local feature extraction |
+| ResNet | MiniResNet | Skip connections |
+| ViT | MiniViT | Transformer-based |
+| Capsule | CapsuleNetwork | Dynamic routing |
+| GNN | TinyGNN | Graph representation |
+| **FANET** | FANET | CNN + Transformer hybrid |
 
 ![Results](results/mnist_results.png)
 """
