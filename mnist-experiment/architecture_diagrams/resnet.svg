@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420">
+  <defs>
+    <linearGradient id="inputGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="convGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="resBlockGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="outputGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#11998e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#38ef7d;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <rect width="900" height="420" fill="#0f0f23"/>
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" fill="white" text-anchor="middle" font-weight="bold">MiniResNet Architecture</text>
+  <text x="450" y="60" font-family="Arial, sans-serif" font-size="14" fill="#888" text-anchor="middle">Residual Networks with Skip Connections • ~130K params</text>
+
+  <!-- Input -->
+  <rect x="30" y="110" width="60" height="60" rx="8" fill="url(#inputGrad)" filter="url(#shadow)"/>
+  <text x="60" y="145" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">Input</text>
+  <text x="60" y="160" font-family="Arial, sans-serif" font-size="10" fill="#0f0f23" text-anchor="middle">1×28×28</text>
+
+  <path d="M 95 140 L 125 140" stroke="#f5576c" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#f5576c"/>
+  </marker></defs>
+
+  <!-- Stem -->
+  <rect x="130" y="100" width="70" height="80" rx="8" fill="url(#convGrad)" filter="url(#shadow)"/>
+  <text x="165" y="128" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Conv2d</text>
+  <text x="165" y="142" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">1→32, 3×3</text>
+  <text x="165" y="154" font-family="Arial, sans-serif" font-size="9" fill="#90ee90" text-anchor="middle">+BN+ReLU</text>
+  <text x="165" y="172" font-family="Arial, sans-serif" font-size="9" fill="#ffd700" text-anchor="middle">28×28</text>
+
+  <path d="M 205 140 L 230 140" stroke="#f5576c" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- ResBlock 1 -->
+  <rect x="235" y="85" width="130" height="110" rx="10" fill="#2d3748" stroke="#f093fb" stroke-width="2" filter="url(#shadow)"/>
+  <text x="300" y="110" font-family="Arial, sans-serif" font-size="12" fill="#f093fb" text-anchor="middle" font-weight="bold">ResBlock 1</text>
+  <text x="300" y="125" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">32→32, stride=1</text>
+  <rect x="250" y="135" width="45" height="45" rx="4" fill="url(#convGrad)"/>
+  <text x="272" y="155" font-family="Arial, sans-serif" font-size="8" fill="white" text-anchor="middle">Conv</text>
+  <text x="272" y="167" font-family="Arial, sans-serif" font-size="7" fill="#e0e0e0" text-anchor="middle">3×3</text>
+  <rect x="325" y="135" width="30" height="45" rx="4" fill="url(#resBlockGrad)"/>
+  <text x="340" y="160" font-family="Arial, sans-serif" font-size="8" fill="white" text-anchor="middle">BN</text>
+  <path d="M 250 155 L 250 125 L 360 125 L 360 175" stroke="#38ef7d" stroke-width="2" fill="none"/>
+  <text x="280" y="118" font-family="Arial, sans-serif" font-size="8" fill="#38ef7d" text-anchor="middle">skip</text>
+  <text x="300" y="175" font-family="Arial, sans-serif" font-size="9" fill="#ffd700" text-anchor="middle">+ (add)</text>
+  <text x="300" y="188" font-family="Arial, sans-serif" font-size="8" fill="#90ee90" text-anchor="middle">ReLU</text>
+
+  <path d="M 370 140 L 395 140" stroke="#f5576c" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- MaxPool -->
+  <rect x="400" y="115" width="55" height="50" rx="6" fill="url(#resBlockGrad)" filter="url(#shadow)"/>
+  <text x="427" y="138" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">MaxPool</text>
+  <text x="427" y="152" font-family="Arial, sans-serif" font-size="8" fill="#0f0f23" text-anchor="middle">14×14</text>
+
+  <path d="M 460 140 L 485 140" stroke="#f5576c" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- ResBlock 2 -->
+  <rect x="490" y="85" width="130" height="110" rx="10" fill="#2d3748" stroke="#f5576c" stroke-width="2" filter="url(#shadow)"/>
+  <text x="555" y="110" font-family="Arial, sans-serif" font-size="12" fill="#f5576c" text-anchor="middle" font-weight="bold">ResBlock 2</text>
+  <text x="555" y="125" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">32→64, stride=2</text>
+  <rect x="505" y="135" width="45" height="45" rx="4" fill="url(#convGrad)"/>
+  <text x="527" y="155" font-family="Arial, sans-serif" font-size="8" fill="white" text-anchor="middle">Conv</text>
+  <text x="527" y="167" font-family="Arial, sans-serif" font-size="7" fill="#e0e0e0" text-anchor="middle">3×3</text>
+  <rect x="555" y="135" width="30" height="45" rx="4" fill="url(#resBlockGrad)"/>
+  <text x="570" y="160" font-family="Arial, sans-serif" font-size="8" fill="white" text-anchor="middle">BN</text>
+  <rect x="505" y="125" width="25" height="20" rx="3" fill="#38ef7d"/>
+  <text x="517" y="138" font-family="Arial, sans-serif" font-size="6" fill="#0f0f23" text-anchor="middle">1×1</text>
+  <text x="517" y="148" font-family="Arial, sans-serif" font-size="6" fill="#0f0f23" text-anchor="middle">conv</text>
+  <text x="555" y="175" font-family="Arial, sans-serif" font-size="9" fill="#ffd700" text-anchor="middle">+ (add)</text>
+  <text x="555" y="188" font-family="Arial, sans-serif" font-size="8" fill="#90ee90" text-anchor="middle">ReLU</text>
+
+  <path d="M 625 140 L 650 140" stroke="#f5576c" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- ResBlock 3 -->
+  <rect x="655" y="85" width="110" height="110" rx="10" fill="#2d3748" stroke="#f5576c" stroke-width="2" filter="url(#shadow)"/>
+  <text x="710" y="110" font-family="Arial, sans-serif" font-size="12" fill="#f5576c" text-anchor="middle" font-weight="bold">ResBlock 3</text>
+  <text x="710" y="125" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">64→128, stride=2</text>
+  <rect x="670" y="135" width="45" height="45" rx="4" fill="url(#convGrad)"/>
+  <text x="692" y="155" font-family="Arial, sans-serif" font-size="8" fill="white" text-anchor="middle">Conv</text>
+  <text x="692" y="167" font-family="Arial, sans-serif" font-size="7" fill="#e0e0e0" text-anchor="middle">3×3</text>
+  <rect x="720" y="135" width="30" height="45" rx="4" fill="url(#resBlockGrad)"/>
+  <text x="735" y="160" font-family="Arial, sans-serif" font-size="8" fill="white" text-anchor="middle">BN</text>
+  <text x="710" y="175" font-family="Arial, sans-serif" font-size="9" fill="#ffd700" text-anchor="middle">+</text>
+  <text x="710" y="188" font-family="Arial, sans-serif" font-size="8" fill="#90ee90" text-anchor="middle">ReLU</text>
+
+  <path d="M 770 140 L 795 140" stroke="#f5576c" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- Output -->
+  <rect x="800" y="100" width="70" height="80" rx="8" fill="url(#outputGrad)" filter="url(#shadow)"/>
+  <text x="835" y="130" font-family="Arial, sans-serif" font-size="10" fill="#0f0f23" text-anchor="middle">Global</text>
+  <text x="835" y="144" font-family="Arial, sans-serif" font-size="10" fill="#0f0f23" text-anchor="middle">AvgPool</text>
+  <text x="835" y="162" font-family="Arial, sans-serif" font-size="9" fill="#0f0f23" text-anchor="middle">→Linear</text>
+  <text x="835" y="176" font-family="Arial, sans-serif" font-size="9" fill="#0f0f23" text-anchor="middle">128→10</text>
+
+  <!-- Detail Panel -->
+  <rect x="30" y="220" width="400" height="180" rx="10" fill="#16213e" stroke="#f093fb" stroke-width="2"/>
+  <text x="230" y="250" font-family="Arial, sans-serif" font-size="14" fill="#f093fb" text-anchor="middle" font-weight="bold">Residual Block Internal Structure</text>
+  <rect x="60" y="280" width="120" height="100" rx="8" fill="#2d3748" stroke="#38ef7d" stroke-width="2"/>
+  <text x="120" y="310" font-family="Arial, sans-serif" font-size="11" fill="#38ef7d" text-anchor="middle">Identity Shortcut</text>
+  <text x="120" y="330" font-family="Arial, sans-serif" font-size="10" fill="#e0e0e0" text-anchor="middle">stride=1, same ch</text>
+  <text x="120" y="365" font-family="Arial, sans-serif" font-size="9" fill="#90ee90" text-anchor="middle">x → x + F(x)</text>
+  <rect x="280" y="280" width="120" height="100" rx="8" fill="#2d3748" stroke="#ffd700" stroke-width="2"/>
+  <text x="340" y="310" font-family="Arial, sans-serif" font-size="11" fill="#ffd700" text-anchor="middle">Projection Shortcut</text>
+  <text x="340" y="330" font-family="Arial, sans-serif" font-size="10" fill="#e0e0e0" text-anchor="middle">stride>1 or ch diff</text>
+  <text x="340" y="365" font-family="Arial, sans-serif" font-size="9" fill="#f5576c" text-anchor="middle">1×1 Conv match</text>
+  <path d="M 185 330 L 270 330" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Key insight -->
+  <rect x="450" y="280" width="420" height="100" rx="10" fill="#1e3a5f" stroke="#667eea" stroke-width="2"/>
+  <text x="660" y="310" font-family="Arial, sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="bold">Why Skip Connections?</text>
+  <text x="660" y="335" font-family="Arial, sans-serif" font-size="11" fill="#90ee90" text-anchor="middle">1. Prevents vanishing gradients in deep networks</text>
+  <text x="660" y="352" font-family="Arial, sans-serif" font-size="11" fill="#90ee90" text-anchor="middle">2. Enables training of much deeper networks</text>
+  <text x="660" y="369" font-family="Arial, sans-serif" font-size="11" fill="#90ee90" text-anchor="middle">3. Acts as identity mapping - degradation isn't mandatory</text>
+
+</svg>

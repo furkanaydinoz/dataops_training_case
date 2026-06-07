@@ -22,6 +22,7 @@ from models.vit import MiniViT
 from models.capsule import CapsuleNetwork
 from models.gnn import TinyGNN
 from models.efficientnet import EfficientNetStyle
+from models.fanet import FANET
 
 RESULTS_DIR = Path(__file__).parent / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -63,7 +64,7 @@ def evaluate(model, loader, device):
             total += target.size(0)
     return 100. * correct / total
 
-def train_model(model, device, epochs=15, lr=0.001):
+def train_model(model, device, epochs=5, lr=0.001):
     transform = get_transforms()
     train_ds = datasets.MNIST(root='./data', train=True, download=True, transform=transform)
     test_ds = datasets.MNIST(root='./data', train=False, transform=transform)
@@ -127,6 +128,7 @@ def main():
         ("ViT-Mini", MiniViT()),
         ("CapsuleNet", CapsuleNetwork()),
         ("GNN-Tiny", TinyGNN()),
+        ("FANET", FANET()),
     ]
 
     results = []
@@ -135,7 +137,7 @@ def main():
         print(f"Training: {name}")
         print(f"{'='*50}")
         model = model.to(device)
-        history = train_model(model, device, epochs=15)
+        history = train_model(model, device, epochs=5)
         final_acc = history["test_acc"][-1]
         results.append({
             "name": name,

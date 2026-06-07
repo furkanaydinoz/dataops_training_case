@@ -1,0 +1,218 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+  <defs>
+    <linearGradient id="layerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="600" fill="#1a1a2e"/>
+
+  <!-- Title -->
+  <text x="450" y="40" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle" font-weight="bold">
+    EfficientNet-B0 Architecture
+  </text>
+
+  <!-- Input -->
+  <rect x="30" y="120" width="80" height="80" rx="8" fill="#4facfe" filter="url(#shadow)"/>
+  <text x="70" y="165" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">INPUT</text>
+  <text x="70" y="180" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">224×224×3</text>
+
+  <!-- Arrow -->
+  <path d="M 115 160 L 145 160" stroke="url(#arrowGrad)" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#f5576c"/>
+  </marker></defs>
+
+  <!-- Stage 1: Conv Stem -->
+  <rect x="150" y="120" width="60" height="80" rx="6" fill="url(#layerGrad)" filter="url(#shadow)"/>
+  <text x="180" y="150" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Conv</text>
+  <text x="180" y="162" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">3×3</text>
+  <text x="180" y="185" font-family="Arial, sans-serif" font-size="9" fill="#90ee90" text-anchor="middle">112×112×32</text>
+
+  <!-- Arrow -->
+  <path d="M 215 160 L 235 160" stroke="url(#arrowGrad)" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- Stage 2: MBConv1 -->
+  <rect x="240" y="120" width="60" height="80" rx="6" fill="#2d3748" stroke="#4facfe" stroke-width="2" filter="url(#shadow)"/>
+  <text x="270" y="150" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">MBConv1</text>
+  <text x="270" y="162" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">expand=1</text>
+  <text x="270" y="185" font-family="Arial, sans-serif" font-size="9" fill="#90ee90" text-anchor="middle">112×112×16</text>
+
+  <!-- Arrow -->
+  <path d="M 305 160 L 325 160" stroke="url(#arrowGrad)" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- Stage 3: MBConv6 -->
+  <rect x="330" y="120" width="60" height="80" rx="6" fill="#2d3748" stroke="#764ba2" stroke-width="2" filter="url(#shadow)"/>
+  <text x="360" y="150" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">MBConv6</text>
+  <text x="360" y="162" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">expand=6</text>
+  <text x="360" y="185" font-family="Arial, sans-serif" font-size="9" fill="#90ee90" text-anchor="middle">56×56×24</text>
+
+  <!-- Arrow -->
+  <path d="M 395 160 L 415 160" stroke="url(#arrowGrad)" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- Stage 4: MBConv6 -->
+  <rect x="420" y="120" width="60" height="80" rx="6" fill="#2d3748" stroke="#764ba2" stroke-width="2" filter="url(#shadow)"/>
+  <text x="450" y="150" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">MBConv6</text>
+  <text x="450" y="162" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">3×3, stride2</text>
+  <text x="450" y="185" font-family="Arial, sans-serif" font-size="9" fill="#90ee90" text-anchor="middle">28×28×40</text>
+
+  <!-- Arrow -->
+  <path d="M 485 160 L 505 160" stroke="url(#arrowGrad)" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- Stage 5: MBConv6 -->
+  <rect x="510" y="120" width="60" height="80" rx="6" fill="#2d3748" stroke="#764ba2" stroke-width="2" filter="url(#shadow)"/>
+  <text x="540" y="150" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">MBConv6</text>
+  <text x="540" y="162" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">5×5</text>
+  <text x="540" y="185" font-family="Arial, sans-serif" font-size="9" fill="#90ee90" text-anchor="middle">28×28×80</text>
+
+  <!-- Arrow -->
+  <path d="M 575 160 L 595 160" stroke="url(#arrowGrad)" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- Stage 6: MBConv6 (larger) -->
+  <rect x="600" y="110" width="70" height="100" rx="6" fill="#2d3748" stroke="#f5576c" stroke-width="2" filter="url(#shadow)"/>
+  <text x="635" y="145" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">MBConv6</text>
+  <text x="635" y="158" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">5×5, SE</text>
+  <text x="635" y="185" font-family="Arial, sans-serif" font-size="9" fill="#90ee90" text-anchor="middle">14×14×112</text>
+
+  <!-- Arrow -->
+  <path d="M 675 160 L 695 160" stroke="url(#arrowGrad)" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- Stage 7: MBConv6 (final) -->
+  <rect x="700" y="100" width="80" height="120" rx="6" fill="#2d3748" stroke="#f5576c" stroke-width="2" filter="url(#shadow)"/>
+  <text x="740" y="140" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">MBConv6</text>
+  <text x="740" y="155" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">5×5, SE</text>
+  <text x="740" y="170" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">stride2</text>
+  <text x="740" y="195" font-family="Arial, sans-serif" font-size="9" fill="#90ee90" text-anchor="middle">7×7×320</text>
+
+  <!-- Arrow to Pooling -->
+  <path d="M 785 160 L 805 160" stroke="url(#arrowGrad)" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- Global AvgPool -->
+  <rect x="810" y="130" width="60" height="60" rx="6" fill="#38ef7d" filter="url(#shadow)"/>
+  <text x="840" y="158" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Global</text>
+  <text x="840" y="170" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">AvgPool</text>
+  <text x="840" y="185" font-family="Arial, sans-serif" font-size="9" fill="#1a1a2e" text-anchor="middle">1280</text>
+
+  <!-- Legend -->
+  <rect x="30" y="260" width="840" height="320" rx="10" fill="#16213e" stroke="#0f3460" stroke-width="2"/>
+
+  <text x="450" y="290" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle" font-weight="bold">
+    Architecture Details
+  </text>
+
+  <!-- MBConv Block Detail -->
+  <rect x="50" y="310" width="380" height="120" rx="8" fill="#1e3a5f" stroke="#4facfe" stroke-width="1"/>
+  <text x="240" y="335" font-family="Arial, sans-serif" font-size="13" fill="#4facfe" text-anchor="middle" font-weight="bold">MBConv Block (Mobile Inverted Bottleneck)</text>
+
+  <!-- Block diagram -->
+  <rect x="70" y="350" width="50" height="50" rx="4" fill="#667eea"/>
+  <text x="95" y="378" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Conv1×1</text>
+  <text x="95" y="390" font-family="Arial, sans-serif" font-size="8" fill="#e0e0e0" text-anchor="middle">expand</text>
+
+  <path d="M 125 375 L 145 375" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="150" y="350" width="50" height="50" rx="4" fill="#764ba2"/>
+  <text x="175" y="378" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Depthwise</text>
+  <text x="175" y="390" font-family="Arial, sans-serif" font-size="8" fill="#e0e0e0" text-anchor="middle">3×3/5×5</text>
+
+  <path d="M 205 375 L 225 375" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="230" y="350" width="50" height="50" rx="4" fill="#f5576c"/>
+  <text x="255" y="378" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">SE Block</text>
+  <text x="255" y="390" font-family="Arial, sans-serif" font-size="8" fill="#e0e0e0" text-anchor="middle">attention</text>
+
+  <path d="M 285 375 L 305 375" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="310" y="350" width="50" height="50" rx="4" fill="#38ef7d"/>
+  <text x="335" y="378" font-family="Arial, sans-serif" font-size="9" fill="#1a1a2e" text-anchor="middle">Conv1×1</text>
+  <text x="335" y="390" font-family="Arial, sans-serif" font-size="8" fill="#1a1a2e" text-anchor="middle">project</text>
+
+  <text x="365" y="378" font-family="Arial, sans-serif" font-size="11" fill="#90ee90" text-anchor="middle">+</text>
+
+  <rect x="380" y="350" width="40" height="50" rx="4" fill="#4facfe" opacity="0.5"/>
+  <text x="400" y="375" font-family="Arial, sans-serif" font-size="8" fill="white" text-anchor="middle">skip</text>
+  <text x="400" y="387" font-family="Arial, sans-serif" font-size="8" fill="white" text-anchor="middle">if same</text>
+
+  <!-- SE Block Detail -->
+  <rect x="470" y="310" width="380" height="120" rx="8" fill="#1e3a5f" stroke="#f5576c" stroke-width="1"/>
+  <text x="660" y="335" font-family="Arial, sans-serif" font-size="13" fill="#f5576c" text-anchor="middle" font-weight="bold">SE Block (Squeeze-Excitation)</text>
+
+  <!-- SE diagram -->
+  <rect x="490" y="355" width="60" height="40" rx="4" fill="#667eea"/>
+  <text x="520" y="378" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Input</text>
+  <text x="520" y="390" font-family="Arial, sans-serif" font-size="8" fill="#e0e0e0" text-anchor="middle">C channels</text>
+
+  <path d="M 555 375 L 575 375" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="580" y="355" width="60" height="40" rx="4" fill="#764ba2"/>
+  <text x="610" y="378" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Global</text>
+  <text x="610" y="390" font-family="Arial, sans-serif" font-size="8" fill="#e0e0e0" text-anchor="middle">AvgPool</text>
+
+  <path d="M 645 375 L 665 375" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="670" y="355" width="60" height="40" rx="4" fill="#f5576c"/>
+  <text x="700" y="378" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">FC→ReLU</text>
+  <text x="700" y="390" font-family="Arial, sans-serif" font-size="8" fill="#e0e0e0" text-anchor="middle">C→C/4</text>
+
+  <path d="M 735 375 L 755 375" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="760" y="355" width="60" height="40" rx="4" fill="#38ef7d"/>
+  <text x="790" y="378" font-family="Arial, sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle">FC→Sigmoid</text>
+  <text x="790" y="390" font-family="Arial, sans-serif" font-size="8" fill="#1a1a2e" text-anchor="middle">C/4→C</text>
+
+  <!-- Resolution stages -->
+  <text x="450" y="460" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">
+    Resolution &amp; Channel Progression
+  </text>
+
+  <!-- Stage boxes -->
+  <rect x="60" y="480" width="70" height="40" rx="6" fill="#4facfe"/>
+  <text x="95" y="500" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">224²</text>
+  <text x="95" y="513" font-family="Arial, sans-serif" font-size="9" fill="#1a1a2e" text-anchor="middle">×3</text>
+
+  <path d="M 135 500 L 175 500" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="180" y="480" width="70" height="40" rx="6" fill="#667eea"/>
+  <text x="215" y="500" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">112²</text>
+  <text x="215" y="513" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">×32</text>
+
+  <path d="M 255 500 L 295 500" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="300" y="480" width="70" height="40" rx="6" fill="#764ba2"/>
+  <text x="335" y="500" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">56²</text>
+  <text x="335" y="513" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">×24</text>
+
+  <path d="M 375 500 L 415 500" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="420" y="480" width="70" height="40" rx="6" fill="#f5576c"/>
+  <text x="455" y="500" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">28²</text>
+  <text x="455" y="513" font-family="Arial, sans-serif" font-size="9" fill="#e0e0e0" text-anchor="middle">×40</text>
+
+  <path d="M 495 500 L 535 500" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="540" y="480" width="70" height="40" rx="6" fill="#f093fb"/>
+  <text x="575" y="500" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">14²</text>
+  <text x="575" y="513" font-family="Arial, sans-serif" font-size="9" fill="#1a1a2e" text-anchor="middle">×112</text>
+
+  <path d="M 615 500 L 655 500" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="660" y="480" width="70" height="40" rx="6" fill="#f5af19"/>
+  <text x="695" y="500" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">7²</text>
+  <text x="695" y="513" font-family="Arial, sans-serif" font-size="9" fill="#1a1a2e" text-anchor="middle">×320</text>
+
+  <path d="M 735 500 L 775 500" stroke="#f5576c" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="780" y="480" width="70" height="40" rx="6" fill="#38ef7d"/>
+  <text x="815" y="500" font-family="Arial, sans-serif" font-size="11" fill="#1a1a2e" text-anchor="middle">1²</text>
+  <text x="815" y="513" font-family="Arial, sans-serif" font-size="9" fill="#1a1a2e" text-anchor="middle">×1280</text>
+
+</svg>

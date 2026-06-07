@@ -5,3 +5,4 @@ from .vit import MiniViT
 from .capsule import CapsuleNetwork
 from .gnn import TinyGNN
 from .efficientnet import EfficientNetStyle
+from .fanet import FANET
