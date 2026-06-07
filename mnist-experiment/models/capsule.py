@@ -19,9 +19,12 @@ class CapsuleLayer(nn.Module):
 class CapsuleNetwork(nn.Module):
     def __init__(self):
         super().__init__()
+        # conv1: 28x28 -> 20x20
         self.conv1 = nn.Conv2d(1, 256, 9)
-        self.caps1 = CapsuleLayer(256, 32, num_capsules=8, dim=8, kernel_size=9, stride=2)
-        self.caps2 = CapsuleLayer(8*8*8, 10, num_capsules=10, dim=16, kernel_size=9, stride=1)
+        # caps1: produces 512 channels (64 * 8) for caps2 which expects 512
+        self.caps1 = CapsuleLayer(256, 64, num_capsules=8, dim=8, kernel_size=5, stride=2)
+        # caps2: input=512 channels, output=10 capsules * 16 dim
+        self.caps2 = CapsuleLayer(512, 10, num_capsules=10, dim=16, kernel_size=3, stride=1)
         self.decoder = nn.Sequential(
             nn.Linear(16*10, 512), nn.ReLU(),
             nn.Linear(512, 1024), nn.ReLU(),

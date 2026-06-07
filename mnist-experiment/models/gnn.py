@@ -40,14 +40,16 @@ class TinyGNN(nn.Module):
             nn.Linear(32, 10)
         )
         self.num_nodes = 9
-        self.edges = torch.zeros(self.num_nodes, self.num_nodes)
+        # Register edges as buffer so it moves to GPU with model
+        edges = torch.zeros(self.num_nodes, self.num_nodes)
         for i in range(3):
             for j in range(3):
-                self.edges[i*3+j, i*3+j] = 1
-                if i > 0: self.edges[i*3+j, (i-1)*3+j] = 1
-                if i < 2: self.edges[i*3+j, (i+1)*3+j] = 1
-                if j > 0: self.edges[i*3+j, i*3+j-1] = 1
-                if j < 2: self.edges[i*3+j, i*3+j+1] = 1
+                edges[i*3+j, i*3+j] = 1
+                if i > 0: edges[i*3+j, (i-1)*3+j] = 1
+                if i < 2: edges[i*3+j, (i+1)*3+j] = 1
+                if j > 0: edges[i*3+j, i*3+j-1] = 1
+                if j < 2: edges[i*3+j, i*3+j+1] = 1
+        self.register_buffer('edges', edges)
 
     def forward(self, x):
         B = x.shape[0]
