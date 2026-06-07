@@ -91,7 +91,7 @@ def train_model(model, device, epochs=5, lr=0.001):
         print(f"Epoch {epoch+1}/{epochs} - Loss: {loss:.4f}, Train Acc: {train_acc:.2f}%, Test Acc: {test_acc:.2f}%")
         sys.stdout.flush()
 
-    return history
+    return history, test_loader
 
 def plot_results(results, save_path):
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
@@ -150,8 +150,8 @@ def main():
         print(f"{'='*60}")
         sys.stdout.flush()
         model = model.to(device)
-        history = train_model(model, device, epochs=5)
-        final_acc, preds, targets, probs = evaluate(model, DataLoader(test_ds, batch_size=256), device)
+        history, test_loader = train_model(model, device, epochs=5)
+        final_acc, preds, targets, probs = evaluate(model, test_loader, device)
         all_test_preds[name] = preds
         all_test_probs[name] = probs
         if all_test_targets is None:
